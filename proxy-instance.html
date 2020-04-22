@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>proxy-instance</title>
+
+    <style type="text/css">
+        html {
+            height: 100%;
+            background-color: #6DD5FA;
+        }
+        *{
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .container {
+            width: 800px;
+            height: 300px;
+            margin: 100px auto 0;
+            background-image: linear-gradient(to right, #2980B9, #6DD5FA, #FFFFFF);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container input,p {
+            width: 200px;
+            height: 30px;
+            margin-top: 20px;
+            text-align: center;
+            line-height: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>proxy-双向数据绑定</h1>
+    <div class="container">
+        <input id="input" class="input" type="text" placeholder="打开控制台看看吧" />
+        <p id="p" class="showInput">input:</p>
+    </div>
+</body>
+<script>
+    const input = document.querySelector('.input');
+    let p = document.querySelector('.showInput');
+
+    let handle = {
+        set(target, property, value, receiver) {
+            console.log('set-value:', value,'\n你也可以在控制台中对obj.value进行设置');
+            input.value = value;
+            target.innerHTML = `input:${value}`;
+        }
+    }
+
+    let obj = new Proxy(p, handle);
+    input.addEventListener('input', function onInput(ev) {
+        obj.value = ev.target.value;
+    })
+</script>
+
+</html>
